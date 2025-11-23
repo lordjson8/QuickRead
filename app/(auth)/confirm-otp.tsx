@@ -46,7 +46,7 @@ export default function OTPVerification() {
         {otp.map((digit, index) => (
           <TextInput
             key={index}
-            ref={(ref) => (inputRefs.current[index] = ref)}
+            ref={(ref: TextInput | null) => { inputRefs.current[index] = ref; }}
             value={digit}
             onChangeText={(val) => handleChange(val.replace(/[^0-9]/g, ""), index)}
             onKeyPress={(e) => handleKeyPress(e, index)}
