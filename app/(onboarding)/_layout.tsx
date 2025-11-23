@@ -7,7 +7,8 @@ export default function OnboardingLayout() {
     <Stack screenOptions={
         {
             headerShown : false,
-            animation: 'fade'
+            animation: 'fade',
+            statusBarHidden : true,
         }
     }/>
   )

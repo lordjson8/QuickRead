@@ -1,6 +1,13 @@
 import { useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import { Check } from "lucide-react-native";
+import { Link } from "expo-router";
 
 const categories = [
   { id: "business", name: "Business & Career", icon: "💼" },
@@ -54,18 +61,23 @@ export default function InterestSelection({
                 <Pressable
                   key={category.id}
                   onPress={() => toggleCategory(category.id)}
-                  className={`relative w-[46%] min-h-[100px] p-4 rounded-2xl border-2 transition-all ${
+                  className={`relative w-[49%] min-h-[100px] p-4 rounded-2xl border-2 transition-all ${
                     isSelected
-                      ? "border-[#007A5E] bg-[#007A5E]/10"
+                      ? "border-primary bg-primary/10"
                       : "border-gray-200 bg-white hover:border-gray-300"
                   }`}
                 >
                   {isSelected && (
-                    <View className="absolute top-2 right-2 w-6 h-6 bg-[#007A5E] rounded-full flex items-center justify-center">
-                      <Check className=" text-white" size={15} color={'#fff'} strokeWidth={3} />
+                    <View className="absolute top-2 right-2 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                      <Check
+                        className=" text-white"
+                        size={15}
+                        color={"#fff"}
+                        strokeWidth={3}
+                      />
                     </View>
                   )}
-                    <View className={` flex-1 gap-2 items-center justify-center`}>
+                  <View className={` flex-1 gap-2 items-center justify-center`}>
                     <Text className="text-4xl">{category.icon}</Text>
                     <Text
                       className={`text-sm ${isSelected ? "text-[#212121]" : "text-gray-700"}`}
@@ -81,17 +93,39 @@ export default function InterestSelection({
       </ScrollView>
 
       <View className="p-6 border-t border-gray-100">
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={onComplete}
           disabled={selectedCategories.length < 3}
           className={`w-full rounded-full py-4 transition-colors ${
             selectedCategories.length >= 3
-              ? "bg-[#007A5E] hover:bg-[#005a45] text-white"
+              ? "bg-primary hover:bg-[#005a45] text-white"
               : "bg-gray-200 text-gray-400 cursor-not-allowed"
           }`}
         >
-          <Text className="text-center text-lg text-white font-bold">Continue ({selectedCategories.length}/ {categories.length + 1})</Text>
-        </TouchableOpacity>
+          <Text className="text-center text-lg text-white font-bold">
+            Continue
+          </Text>
+        </TouchableOpacity> */}
+        <Link href="/(auth)/signup" asChild>
+          <TouchableOpacity
+            onPress={onComplete}
+            disabled={selectedCategories.length < 3}
+            className={`${
+              selectedCategories.length >= 3 ? "bg-primary" : "bg-gray-200"
+            } w-full py-4 px-6  rounded-2xl  shadow-lg shadow-primary/20 active:scale-[0.98] transition-transform`}
+          >
+            <Text className="text-center text-primary-foreground font-bold text-lg">
+              Continue ({selectedCategories.length}/ {categories.length + 1})
+            </Text>
+          </TouchableOpacity>
+        </Link>
+        <View className="">
+          <TouchableOpacity className=" ">
+            <Text className="text-center py-2 text-sm font-medium text-muted-foreground">
+              Skip
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

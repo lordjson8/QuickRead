@@ -1,47 +1,57 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import { BookOpen } from "lucide-react-native";
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Link } from "expo-router";
+import { Link, Stack } from "expo-router";
 
-export default function r() {
+import { View, Text, TouchableOpacity } from "react-native";
+
+export default function WelcomeOnboarding() {
   return (
-    <SafeAreaView className="flex-1 bg-[#F9F9F9]">
-      <View className="flex-1 px-8 pt-20 items-center justify-center">
-        <View className="w-full flex-1 ">
-          <View className="flex-1 gap-6  items-center justify-center mb-2">
-            <View className="h-32 w-32 bg-gradient-to-br bg-green-800 from-[#007A5E] to-[#005a45] rounded-3xl flex items-center justify-center shadow-2xl">
-              <BookOpen strokeWidth={2} width={64} height={64} color={"#fff"} />
-            </View>
-            <View>
-              <Text className="text-center text-2xl font-bold text-[#212121] mb-4">
-                Learn Faster, Read Smarter
-              </Text>
-              <Text className="text-center text-gray-600 px-4">
-                Get the key insights from bestselling books in just 15 minutes
-              </Text>
-            </View>
+    <View className=" bg-background backdrop-blur-lg font-sans text-foreground flex-1">
+      <View className="flex-1 relative  px-6 pt-16 pb-12 justify-between">
+        <View className="absolute inset-0">
+          <View className="absolute -top-20 -right-32 w-96 h-96 bg-primary rounded-full opacity-90 blur-3xl" />
+          <View className="absolute top-1/4 -left-24 w-80 h-80 bg-primary rounded-full opacity-40 blur-2xl" />
+          <View className="absolute top-32 left-12 w-32 h-32 bg-accent rounded-full opacity-60 blur-xl" />
+          <View className="absolute bottom-1/3 right-8 w-24 h-24 bg-accent rounded-full opacity-50 blur-lg" />
+          <View className="absolute bottom-20 left-1/4 w-64 h-64 bg-primary rounded-full opacity-20 blur-3xl" />
+          <View className="absolute top-1/2 right-1/3 w-16 h-16 bg-accent rounded-full opacity-70 blur-md" />
+        </View>
+        <View className="relative z-10 flex-1 justify-center">
+          <View className="mb-8">
+            <Text className="text-5xl font-bold flex-col font-heading text-foreground leading-tight tracking-tight">
+              Big Ideas
+            </Text>
+            <Text className="text-5xl font-bold flex-col font-heading text-foreground leading-tight tracking-tight mb-6">
+              in 15 Minutes
+            </Text>
+            <Text className="text-lg text-foreground/70 leading-relaxed max-w-sm">
+              Discover powerful insights from the world&apos;s best books,
+              distilled into bite-sized summaries you can read or listen to in
+              minutes.
+            </Text>
           </View>
         </View>
-      </View>
-      <View className="p-8 pb-12">
-        <View className="flex-row justify-center gap-2 mb-8">
-          <View className="w-8 h-1 bg-[#007A5E] rounded-full"></View>
-          <View className="w-8 h-1 bg-gray-200 rounded-full"></View>
-          <View className="w-8 h-1 bg-gray-200 rounded-full"></View>
-        </View>
+        <View className="relative z-10 space-y-8">
+          <View className="flex justify-center gap-2 flex-row mb-6">
+            <View className="w-2 h-2 rounded-full bg-accent shadow-sm" />
+            <View className="w-2 h-2 rounded-full bg-muted-foreground/30" />
+            <View className="w-2 h-2 rounded-full bg-muted-foreground/30" />
+          </View>
+          <Link href="/(onboarding)/welcome-two" asChild>
+            <TouchableOpacity className="w-full py-4 px-6 bg-primary  rounded-2xl  shadow-lg shadow-primary/20 active:scale-[0.98] transition-transform">
+              <Text className="text-center text-primary-foreground font-bold text-lg">
+                Get Started
+              </Text>
+            </TouchableOpacity>
+          </Link>
 
-        <Link asChild href={"/(onboarding)/welcome-two"}>
-          <TouchableOpacity
-            //   onClick={onNext}
-            className="w-full bg-[#007A5E] hover:bg-[#005a45] text-white rounded-full py-4 transition-colors"
-          >
-            <Text className="text-center text-white font-bold text-2xl">
-              Get Started
-            </Text>
-          </TouchableOpacity>
-        </Link>
+          <Link asChild href={'/(auth)/confirm-otp'} className="">
+            <TouchableOpacity className=" ">
+              <Text className="text-center py-2 text-sm font-medium text-muted-foreground">
+                Skip
+              </Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }

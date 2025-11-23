@@ -6,8 +6,13 @@ export default function AuthLayout() {
   return (
     <Stack screenOptions={
         {
-            headerShown : false
+            headerShown : false,
+            statusBarStyle : 'dark',
         }
-    }/>
+        
+    }>
+      <Stack.Screen name="login"  />
+      <Stack.Screen name="confirm-otp"  />
+      </Stack>
   )
 }
