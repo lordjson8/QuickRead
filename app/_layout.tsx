@@ -12,6 +12,7 @@ import * as SplashScreen from "expo-splash-screen";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useEffect } from "react";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -21,6 +22,16 @@ SplashScreen.setOptions({
   duration: 2000,
   fade: true,
 });
+
+
+ GoogleSignin.configure({
+    webClientId: "592514759965-u8djt882it06mqiiornalvovgskjt49k.apps.googleusercontent.com", // From Google Cloud Console
+    // webClientId: "592514759965-62mmuvev6m38vri9gifef85qdiirkhp2.apps.googleusercontent.com",
+    offlineAccess: true, // If you need to access Google API on behalf of the user
+    forceCodeForRefreshToken: true, // [Android] related to offlineAccess
+    iosClientId:"592514759965-45f4urfaqpki8qkoug2p10hk6n12ur3g.apps.googleusercontent.com", // [iOS]
+    profileImageSize: 120, // [iOS] The desired dimension (width/height) of the profile image
+  });
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();

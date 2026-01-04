@@ -1,4 +1,6 @@
 import { Link } from "expo-router";
+import { Eye, EyeClosed } from "lucide-react-native";
+import React from "react";
 import {
   View,
   Text,
@@ -8,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Path, G } from "react-native-svg";
 
 const Google = () => (
@@ -41,18 +44,21 @@ const Facebook = () => (
 );
 
 export default function SignUp() {
+  const [showPassword, setShowPassword] = React.useState(false);
+
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "height" : "height"}
-      className="flex-1 bg-background"
-    >
+    // <KeyboardAvoidingView
+    //   behavior={Platform.OS === "ios" ? "height" : "height"}
+    //   className="flex-1 bg-background"
+    // >
+    <SafeAreaView className="flex-1 bg-background">
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
         <View className="flex-1  bg-background px-6">
-          <View className="items-center flex-1 justify-center py-12 bg-primary/5 rounded-b-3xl mx-2 mb-8">
+          <View className="items-center flex-1 justify-center py-12  rounded-b-3xl mx-2 mb-8">
             <View className="w-20 h-20 bg-primary/10 rounded-2xl items-center justify-center mb-4 shadow-sm border border-primary/20">
               <Text className="text-2xl">✨</Text>
             </View>
@@ -84,34 +90,32 @@ export default function SignUp() {
               <Text className="text-lg font-semibold text-foreground">
                 Password
               </Text>
-              <View className="relative">
+              <View className="relative px-3 bg-card shadow-sm items-center border-2 rounded-xl border-border focus:border-primary  flex-row w-full">
                 <TextInput
-                  className="w-full h-14 px-3 bg-card border-2 border-border rounded-xl text-lg text-foreground placeholder:text-muted-foreground focus:border-primary shadow-sm"
+                  className="flex-1 h-14 placeholder:text-muted-foreground    text-lg text-foreground   "
                   placeholder="••••••••"
-                  secureTextEntry
+                  secureTextEntry={showPassword}
                   autoCapitalize="none"
                   autoComplete="password"
                 />
-                <TouchableOpacity className="absolute right-4 top-1/2 -translate-y-1/2 p-2">
-                  <Text>👁️</Text>
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                  className=""
+                >
+                  {showPassword ? <Eye /> : <EyeClosed />}
                 </TouchableOpacity>
               </View>
             </View>
             <View>
-                <Link asChild href={'/(auth)/reset-password'}>
-                <TouchableOpacity className="my-3 items-end mx-2">
-                    <Text className="text-primary">
-                    Forgot Password?
-
-                    </Text>
+              <Link asChild href={"/(auth)/reset-password"}>
+                <TouchableOpacity className="my- items-end mx-2">
+                  <Text className="text-primary">Forgot Password?</Text>
                 </TouchableOpacity>
-                </Link>
+              </Link>
             </View>
 
             <TouchableOpacity className="w-full h-14 bg-primary rounded-xl shadow-lg shadow-primary/30 active:opacity-90  flex-row items-center justify-center gap-2">
-              <Text className="text-white text-lg font-semibold">
-                Log In
-              </Text>
+              <Text className="text-white text-lg font-semibold">Log In</Text>
               <Text>→</Text>
             </TouchableOpacity>
 
@@ -138,7 +142,7 @@ export default function SignUp() {
               <Text className="text-muted-foreground text-base">
                 Don&apos;t have an account?
               </Text>
-              <Link href={'/(auth)/signup'} asChild>
+              <Link href={"/(auth)/signup"} asChild>
                 <TouchableOpacity className="ml-2">
                   <Text className="text-primary font-semibold text-base underline">
                     Sign Up
@@ -149,6 +153,6 @@ export default function SignUp() {
           </View>
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }

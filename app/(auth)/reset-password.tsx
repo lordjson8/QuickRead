@@ -12,11 +12,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ForgotPassword() {
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 bg-background"
-    >
-      <SafeAreaView>
+         <SafeAreaView className="flex-1 bg-background">
+   
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
           showsVerticalScrollIndicator={false}
@@ -91,6 +88,5 @@ export default function ForgotPassword() {
           </View>
         </ScrollView>
       </SafeAreaView>
-    </KeyboardAvoidingView>
   );
 }

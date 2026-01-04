@@ -1,4 +1,6 @@
 import { Link } from "expo-router";
+import { Eye, EyeClosed } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,8 +9,22 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+  SignInResponse,
+  isErrorWithCode,
+  isSuccessResponse,
+  User,
+} from "@react-native-google-signin/google-signin";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Path, G } from "react-native-svg";
+
+
+
 
 const Google = () => (
   <Svg width={20} height={20} viewBox="0 0 24 24">
@@ -40,19 +56,134 @@ const Facebook = () => (
   </Svg>
 );
 
+ GoogleSignin.configure({
+    webClientId: "592514759965-u8djt882it06mqiiornalvovgskjt49k.apps.googleusercontent.com", // From Google Cloud Console
+    // webClientId: "592514759965-62mmuvev6m38vri9gifef85qdiirkhp2.apps.googleusercontent.com",
+    offlineAccess: true, // If you need to access Google API on behalf of the user
+    forceCodeForRefreshToken: true, // [Android] related to offlineAccess
+    iosClientId:"592514759965-45f4urfaqpki8qkoug2p10hk6n12ur3g.apps.googleusercontent.com", // [iOS]
+    profileImageSize: 120, // [iOS] The desired dimension (width/height) of the profile image
+  });
+
 export default function SignUp() {
+ 
+
+  const [userInfo, setUserInfo] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  // Check if user is already signed in
+  // useEffect(() => {
+  //   checkIfUserIsSignedIn();
+  // }, []);
+
+  // const checkIfUserIsSignedIn = async () => {
+  //   try {
+  //     const isSignedIn = await GoogleSignin.getCurrentUser();
+  //     if (isSignedIn) {
+  //       const user = await GoogleSignin.getCurrentUser();
+  //       setUserInfo(user);
+  //     }
+  //   } catch (error) {
+  //     console.log("Error checking sign-in status:", error);
+  //   }
+  // };
+
+  // const signIn = async () => {
+  //   try {
+  //     setLoading(true);
+  //     setError(null);
+
+  //     await GoogleSignin.hasPlayServices();
+  //     const userInfo = await GoogleSignin.signIn();
+  //     setUserInfo(userInfo.data);
+
+  //     // Get access token if needed for backend
+  //     const tokens = await GoogleSignin.getTokens();
+  //     console.log('Access Token:', tokens.accessToken);
+
+  //     // Send token to your backend for verification
+  //     // await verifyTokenWithBackend(tokens.accessToken);
+
+  //   } catch (error: any) {
+
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const signOut = async () => {
+  //   try {
+  //     await GoogleSignin.signOut();
+  //     setUserInfo(null);
+  //     setError(null);
+  //   } catch (error) {
+  //     console.log('Sign out error:', error);
+  //     setError('Error signing out');
+  //   }
+  // };
+
+  // const revokeAccess = async () => {
+  //   try {
+  //     await GoogleSignin.revokeAccess();
+  //     await GoogleSignin.signOut();
+  //     setUserInfo(null);
+  //     setError(null);
+  //   } catch (error) {
+  //     console.log('Revoke access error:', error);
+  //   }
+  // };
+
+  // if (loading) {
+  //   return (
+  //     <View >
+  //       <ActivityIndicator size="large" color="#4285F4" />
+  //      </View>
+  //   );
+  // }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setLoading(true);
+      console.log("proc");
+      const suceess = await GoogleSignin.hasPlayServices();
+      console.log("success", suceess)
+      const response = await GoogleSignin.signIn();
+      if (isSuccessResponse(response)) {
+        const { idToken, user } = response.data;
+        const { name, id, photo, email } = user;
+        console.log("user", user);
+      }
+      // setError(null);
+    } catch (error: any) {
+      console.log(error);
+      console.log("Google Sign-In Error:", error);
+
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        setError("Sign in was cancelled");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        setError("Sign in is already in progress");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        setError("Play services not available");
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+      console.log("fin");
+    }
+  };
+
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "height" : "height"}
-      className="flex-1 bg-background"
-    >
+    <SafeAreaView className="flex-1 bg-background">
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
         <View className="flex-1  bg-background px-6">
-          <View className="items-center flex-1 justify-center py-12 bg-primary/5 rounded-b-3xl mx-2 mb-8">
+          <View className="items-center flex-1 justify-center py-12  rounded-b-3xl mx-2 mb-8">
             <View className="w-20 h-20 bg-primary/10 rounded-2xl items-center justify-center mb-4 shadow-sm border border-primary/20">
               <Text className="text-2xl">✨</Text>
             </View>
@@ -63,7 +194,6 @@ export default function SignUp() {
               Lorem ipsum dolor sit amet.
             </Text>
           </View>
-
           <View className="flex-1 gap-2">
             <View className="">
               <Text className="text-lg font-semibold text-foreground">
@@ -98,16 +228,19 @@ export default function SignUp() {
               <Text className="text-lg font-semibold text-foreground">
                 Password
               </Text>
-              <View className="relative">
+              <View className="relative px-3 bg-card shadow-sm items-center border-2 rounded-xl border-border focus:border-primary placeholder:text-muted-foreground flex-row w-full">
                 <TextInput
-                  className="w-full h-14 px-3 bg-card border-2 border-border rounded-xl text-lg text-foreground placeholder:text-muted-foreground focus:border-primary shadow-sm"
+                  className="flex-1 h-14  placeholder:text-muted-foreground  text-lg text-foreground   "
                   placeholder="••••••••"
-                  secureTextEntry
+                  secureTextEntry={showPassword}
                   autoCapitalize="none"
                   autoComplete="password"
                 />
-                <TouchableOpacity className="absolute right-4 top-1/2 -translate-y-1/2 p-2">
-                  <Text>👁️</Text>
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                  className=""
+                >
+                  {showPassword ? <Eye /> : <EyeClosed />}
                 </TouchableOpacity>
               </View>
             </View>
@@ -128,8 +261,11 @@ export default function SignUp() {
             </View>
 
             <View className="flex-row gap-3">
-              <TouchableOpacity className="flex-1 h-14 bg-white border-2 border-border rounded-xl flex-row items-center justify-center gap-2 active:bg-neutral-50">
-                <Google />
+              <TouchableOpacity
+                onPress={() => handleGoogleSignIn()}
+                className="flex-1 h-14 bg-white border-2 border-border rounded-xl flex-row items-center justify-center gap-2 active:bg-neutral-50"
+              >
+                {loading ? <ActivityIndicator /> : <Google />}
                 <Text className="font-semibold text-foreground">Google</Text>
               </TouchableOpacity>
               <TouchableOpacity className="flex-1 h-14 bg-white border-2 border-border rounded-xl flex-row items-center justify-center gap-2 active:bg-neutral-50">
@@ -142,7 +278,7 @@ export default function SignUp() {
               <Text className="text-muted-foreground text-base">
                 Already have an account?
               </Text>
-              <Link href={'/(auth)/login'} asChild>
+              <Link href={"/(auth)/login"} asChild>
                 <TouchableOpacity className="ml-2">
                   <Text className="text-primary font-semibold text-base underline">
                     Log In
@@ -153,6 +289,6 @@ export default function SignUp() {
           </View>
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
