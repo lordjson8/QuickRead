@@ -25,10 +25,9 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "config": {
-        // "googleSignIn": {
-        //   "apiKey": "YOUR_ANDROID_API_KEY",
-        //   "certificateHash": "YOUR_CERTIFICATE_HASH"
-        // }
+        "googleSignIn": {
+          "certificateHash": "B3:B6:27:48:27:08:5F:D4:22:9D:B5:69:98:B8:47:03:58:2E:8F:6C"
+        }
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
