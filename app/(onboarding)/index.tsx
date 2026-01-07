@@ -1,3 +1,4 @@
+import SkipOnboardingButton from "@/components/onboarding/SkipOnboardingButton";
 import { Link, Stack } from "expo-router";
 
 import { View, Text, TouchableOpacity } from "react-native";
@@ -43,13 +44,9 @@ export default function WelcomeOnboarding() {
             </TouchableOpacity>
           </Link>
 
-          <Link asChild href={'/(auth)/confirm-otp'} className="">
-            <TouchableOpacity className=" ">
-              <Text className="text-center py-2 text-sm font-medium text-muted-foreground">
-                Skip
-              </Text>
-            </TouchableOpacity>
-          </Link>
+          <View>
+            <SkipOnboardingButton />
+          </View>
         </View>
       </View>
     </View>

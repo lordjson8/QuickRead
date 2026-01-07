@@ -1,3 +1,4 @@
+import SkipOnboardingButton from "@/components/onboarding/SkipOnboardingButton";
 import { Link, Stack } from "expo-router";
 import { Zap } from "lucide-react-native";
 
@@ -50,11 +51,7 @@ export default function WelcomeOnboarding() {
           </Link>
 
           <View className="">
-            <TouchableOpacity className=" ">
-              <Text className="text-center py-2 text-sm font-medium text-muted-foreground">
-                Skip
-              </Text>
-            </TouchableOpacity>
+            <SkipOnboardingButton />
           </View>
         </View>
       </View>

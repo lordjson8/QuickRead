@@ -1,9 +1,12 @@
+import SkipOnboardingButton from "@/components/onboarding/SkipOnboardingButton";
+import { useAuthStore } from "@/store/auth.store";
 import { Link, Stack } from "expo-router";
 import { Headphones, Zap } from "lucide-react-native";
 
 import { View, Text, TouchableOpacity } from "react-native";
 
 export default function WelcomeOnboarding() {
+  const { completeOnboarding } = useAuthStore();
   return (
     <View className=" bg-background backdrop-blur-lg font-sans text-foreground flex-1">
       <View className="flex-1 relative  px-6 pt-16 pb-12 justify-between">
@@ -48,20 +51,16 @@ export default function WelcomeOnboarding() {
             <View className="w-2 h-2 rounded-full bg-muted-foreground/30" />
             <View className="w-2 h-2 rounded-full bg-accent shadow-sm" />
           </View>
-          <Link href="/(onboarding)/interest-selection" asChild>
+          <TouchableOpacity onPress={completeOnboarding}>
             <TouchableOpacity className="w-full py-4 px-6 bg-primary  rounded-2xl  shadow-lg shadow-primary/20 active:scale-[0.98] transition-transform">
               <Text className="text-center text-primary-foreground font-bold text-lg">
                 Continue
               </Text>
             </TouchableOpacity>
-          </Link>
+          </TouchableOpacity>
 
           <View className="">
-            <TouchableOpacity className=" ">
-              <Text className="text-center py-2 text-sm font-medium text-muted-foreground">
-                Skip
-              </Text>
-            </TouchableOpacity>
+            <SkipOnboardingButton />
           </View>
         </View>
       </View>

@@ -3,7 +3,6 @@ import React from 'react'
 import { Redirect, Stack } from 'expo-router'
 
 export default function OnboardingLayout() {
-  return <Redirect href={'/(auth)/signup'}/>
   return (
     <Stack screenOptions={
         {
@@ -11,6 +10,10 @@ export default function OnboardingLayout() {
             animation: 'fade',
             statusBarHidden : true,
         }
-    }/>
+    }>
+      <Stack.Screen name='index'/>
+      <Stack.Screen name='welcome-two'/>
+      <Stack.Screen name='welcome-three'/>
+      </Stack>
   )
 }
