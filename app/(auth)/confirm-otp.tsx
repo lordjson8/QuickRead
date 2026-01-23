@@ -1,28 +1,68 @@
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
-import { useRef } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+import { useRef, useState } from "react";
 import { Mail } from "lucide-react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { otpSchema } from "@/lib/validations/auth";
+import { OtpSchema } from "@/lib/validations/auth";
 import { z } from "zod";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import authService from "@/services/auth.service";
 
 export default function OTPVerification() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const { email, email_mask, otp_expiry_minutes, user_id } =
+    useLocalSearchParams<{
+      user_id: string;
+      email: string;
+      email_mask: string;
+      otp_expiry_minutes: string;
+    }>();
   const {
     control,
     handleSubmit,
-    formState: { errors },
-  } = useForm<z.infer<typeof otpSchema>>({
-    resolver: zodResolver(otpSchema),
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<z.infer<typeof OtpSchema>>({
+    resolver: zodResolver(OtpSchema),
     defaultValues: {
       pin: "",
     },
   });
+
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
-  const onSubmit = (values: z.infer<typeof otpSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof OtpSchema>) => {
+    try {
+      setLoading(true);
+      const response = await authService.sendOTP({
+        user_id: user_id,
+        otp_code: values.pin,
+      });
+    } catch (error) {
+      console.log(JSON.stringify(error.response.data))
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resendOTP = async () => {
+    try {
+      setLoading(true);
+      const response = await authService.resendOTP(user_id);
+      console.log(JSON.stringify(response));
+    } catch (error) {
+      console.log(JSON.stringify(error));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,7 +78,7 @@ export default function OTPVerification() {
       </Text>
 
       <Text className="text-gray-600 text-center mb-10">
-        We’ve sent a 6-digit code to your email.
+        We’ve sent a 6-digit code to your email {email_mask}.
       </Text>
 
       {/* OTP INPUT ROW */}
@@ -67,6 +107,7 @@ export default function OTPVerification() {
                     inputRefs.current[index - 1]?.focus();
                   }
                 }}
+                editable={!loading}
                 keyboardType="number-pad"
                 maxLength={1}
                 className="w-12 h-14 border-2 border-gray-300 rounded-xl text-center text-2xl font-semibold"
@@ -75,21 +116,29 @@ export default function OTPVerification() {
           </View>
         )}
       />
-       {errors.pin && (
-        <Text className="text-red-500 text-center -mt-8 mb-4">{errors.pin.message}</Text>
+      {errors.pin && (
+        <Text className="text-red-500 text-center -mt-8 mb-4">
+          {errors.pin.message}
+        </Text>
       )}
 
       {/* TIMER */}
       <Text className="text-center text-gray-500 mb-6">
-        Code expires in <Text className="font-bold">00:30</Text>
+        Code expires in <Text className="font-bold">{otp_expiry_minutes}</Text>{" "}
+        minutes
       </Text>
 
       {/* VERIFY BUTTON */}
       <TouchableOpacity
+        disabled={watch().pin.length < 6 || loading}
         onPress={handleSubmit(onSubmit)}
-        className="w-full bg-primary h-14 rounded-2xl items-center justify-center active:opacity-80"
+        className={`placeholder:w-full bg-primary disabled:bg-gray-400 h-14 rounded-2xl items-center justify-center active:opacity-80`}
       >
-        <Text className="text-white text-lg font-semibold">Verify Code</Text>
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <Text className="text-white text-lg font-semibold">Verify Code</Text>
+        )}
       </TouchableOpacity>
 
       {/* RESEND */}
@@ -97,7 +146,7 @@ export default function OTPVerification() {
         Didn’t receive the code?
       </Text>
 
-      <TouchableOpacity className="mt-1">
+      <TouchableOpacity onPress={() => resendOTP()} className="mt-1">
         <Text className="text-center text-primary font-semibold underline">
           Resend Code
         </Text>

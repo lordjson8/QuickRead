@@ -15,6 +15,7 @@ export const useAuthStore = create<AuthStoreType>()(
           set({ hasCompletedOnboarding: value });
         },
         completeOnboarding: () => {
+          console.log("set")
           set({ hasCompletedOnboarding: true });
         },
 
@@ -46,3 +47,6 @@ export const useAuthStore = create<AuthStoreType>()(
     }
   )
 );
+
+
+export const authStore = useAuthStore;
