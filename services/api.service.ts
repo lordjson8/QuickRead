@@ -9,6 +9,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  // timeout: 10000,
 });
 
 api.interceptors.request.use(
@@ -23,7 +24,7 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 api.interceptors.response.use(
@@ -47,14 +48,13 @@ api.interceptors.response.use(
         await authStore.getState().setTokens(access, refresh);
         originalRequest.headers.Authorization = `Bearer ${access}`;
         return api(originalRequest);
-        
       } catch (error) {
         await authStore.getState().logout();
         return Promise.reject(error);
       }
     }
     throw error;
-  }
+  },
 );
 
 export default api;
