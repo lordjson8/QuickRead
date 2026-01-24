@@ -1,3 +1,4 @@
+import authService from "@/services/auth.service";
 import {
   GoogleSignin,
   isSuccessResponse,
@@ -23,6 +24,7 @@ export const googleAuthHandler = async ({
       const { name, id, photo, email } = user;
       console.log("user", user);
       console.log("api here");
+      // const aoiResponse = await authService.googleAuth(idToken)
     }
   } catch (error: any) {
     console.log(error);
