@@ -4,6 +4,7 @@ import {
   isSuccessResponse,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import { classifyAxiosError } from "../api/classifyAxiosError";
 
 export const googleAuthHandler = async ({
   setLoading,
@@ -23,10 +24,11 @@ export const googleAuthHandler = async ({
       const { idToken, user } = response.data;
       const { name, id, photo, email } = user;
       console.log("user", user);
-      console.log("api here");
-      // const aoiResponse = await authService.googleAuth(idToken)
+      console.log("api here", idToken);
+
+      await authService.googleAuth(idToken);
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
     console.log("Google Sign-In Error:", error);
 
@@ -37,7 +39,29 @@ export const googleAuthHandler = async ({
     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
       setError("Play services not available");
     } else {
-      setError("Something went wrong. Please try again.");
+      const classifiedError = classifyAxiosError(error);
+
+      switch (classifiedError.type) {
+        case "network":
+          setError("Network error. Please check your internet connection.");
+          break;
+        case "timeout":
+          setError("Request timed out. Please try again.");
+          break;
+        case "http":
+          if (classifiedError.status === 400) {
+            console.log("Invalid request. Please check your input.");
+          } else if (classifiedError.status === 500) {
+            setError("Server error. Please try again later.");
+          } else {
+            setError(
+              classifiedError.message || "An error occurred. Please try again.",
+            );
+          }
+          break;
+        default:
+          setError("An unknown error occurred. Please try again.");
+      }
     }
   } finally {
     setLoading(false);

@@ -26,7 +26,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function SignUp() {
+export default function LoginView() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);

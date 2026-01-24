@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import { Eye, EyeClosed } from "lucide-react-native";
+import { ArrowRight, Eye, EyeClosed } from "lucide-react-native";
 import React, { useState } from "react";
 import {
   View,
@@ -26,7 +26,7 @@ import { Google } from "@/components/icons/Google";
 import { Facebook } from "@/components/icons/Facebook";
 import { googleAuthHandler } from "@/lib/oauth/googleAuthHandler";
 
-export default function SignUp() {
+export default function SignUpView() {
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -224,7 +224,7 @@ export default function SignUp() {
                     <Text className="text-white text-lg font-semibold">
                       Create Account
                     </Text>
-                    <Text>→</Text>
+                    <ArrowRight color={"#fff"}/>
                   </>
                 )}
               </TouchableOpacity>

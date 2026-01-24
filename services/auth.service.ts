@@ -24,10 +24,10 @@ class AuthServices {
      const response = await api.post("/auth/verify-email/",payload)
     return response;
   }
-  
+
   async googleAuth(id_token) {
-    const response = await api.post("/auth/verify-email/",{id_token})
-    return response;
+    const response = await api.post('/auth/google-auth/',{id_token});
+    return response
   }
 
 }
