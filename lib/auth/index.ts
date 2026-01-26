@@ -71,7 +71,7 @@ export const loginUser = async ({
   try {
     setLoading(true);
     const response = await authService.login(data);
-    // next steps
+    
   } catch (error) {
     const classifiedError = classifyAxiosError(error);
 

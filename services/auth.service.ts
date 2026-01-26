@@ -27,7 +27,7 @@ class AuthServices {
 
   async googleAuth(id_token) {
     const response = await api.post('/auth/google-auth/',{id_token});
-    return response
+    return response.data
   }
 
 }

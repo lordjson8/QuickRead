@@ -64,6 +64,7 @@ export default function OTPVerification() {
       setLoading(false);
     }
   };
+  // router.
 
   return (
     <View className="flex-1 bg-white px-6 pt-20">

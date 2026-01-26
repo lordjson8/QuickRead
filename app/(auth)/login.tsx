@@ -84,8 +84,8 @@ export default function LoginView() {
               </Text>
             </View>
             {error && (
-              <View className="flex-1 rounded-lg border-2 border-red-400 bg-red-300 px-4 py-2">
-                <Text className="text-white font-bold">{error}</Text>
+              <View className="flex-1 items-center justify-center rounded-lg border-2 border-red-400 px-4 py-2 mb-2">
+                <Text className="text-red-500 font-bold">{error}</Text>
               </View>
             )}
             <View className="flex-1 gap-2">
@@ -140,7 +140,7 @@ export default function LoginView() {
                         <TextInput
                           className="flex-1 h-14  placeholder:text-muted-foreground  text-lg text-foreground   "
                           placeholder="••••••••"
-                          secureTextEntry={showPassword}
+                          secureTextEntry={!showPassword}
                           value={value}
                           onChangeText={onChange}
                           onBlur={onBlur}
@@ -205,19 +205,19 @@ export default function LoginView() {
                   {loading ? <ActivityIndicator /> : <Google />}
                   <Text className="font-semibold text-foreground">Google</Text>
                 </TouchableOpacity>
-                <TouchableOpacity className="flex-1 h-14 bg-white border-2 border-border rounded-xl flex-row items-center justify-center gap-2 active:bg-neutral-50">
+                {/* <TouchableOpacity className="flex-1 h-14 bg-white border-2 border-border rounded-xl flex-row items-center justify-center gap-2 active:bg-neutral-50">
                   <Facebook />
                   <Text className="font-semibold text-foreground">
                     Facebook
                   </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
 
               <View className="flex-row justify-center items-center mt-8 mb-8 ">
                 <Text className="text-muted-foreground text-base">
                   Don&apos;t have an account?
                 </Text>
-                <Link href={"/(auth)/signup"} asChild>
+                <Link disabled={loading} replace href={"/(auth)/signup"} asChild>
                   <TouchableOpacity className="ml-2">
                     <Text className="text-primary font-semibold text-base underline">
                       Sign Up

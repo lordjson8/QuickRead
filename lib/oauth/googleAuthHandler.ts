@@ -5,6 +5,7 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin";
 import { classifyAxiosError } from "../api/classifyAxiosError";
+import { authStore, useAuthStore } from "@/store/auth.store";
 
 export const googleAuthHandler = async ({
   setLoading,
@@ -21,12 +22,16 @@ export const googleAuthHandler = async ({
     console.log("success", suceess);
     const response = await GoogleSignin.signIn();
     if (isSuccessResponse(response)) {
-      const { idToken, user } = response.data;
-      const { name, id, photo, email } = user;
-      console.log("user", user);
-      console.log("api here", idToken);
+      const { idToken } = response.data;
+      // const { name, id, photo, email } = user;
+      // console.log("user", user);
+      // console.log("api here", idToken);
 
-      await authService.googleAuth(idToken);
+      const apiResponse = await authService.googleAuth(idToken);
+      console.log(apiResponse.data)
+      
+      await useAuthStore.getState().setTokens(apiResponse.data.tokens.access,apiResponse.data.tokens.refresh)
+      useAuthStore.getState().setUser(apiResponse.data.user)
     }
   } catch (error) {
     console.log(error);
@@ -50,6 +55,7 @@ export const googleAuthHandler = async ({
           break;
         case "http":
           if (classifiedError.status === 400) {
+            console.log(JSON.stringify(classifiedError.data))
             console.log("Invalid request. Please check your input.");
           } else if (classifiedError.status === 500) {
             setError("Server error. Please try again later.");

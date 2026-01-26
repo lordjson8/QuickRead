@@ -11,11 +11,14 @@ export const useAuthStore = create<AuthStoreType>()(
         user: null,
         _hydrated: false,
         hasCompletedOnboarding: false,
+        setUser: (userdata) => {
+          set({ user: userdata });
+        },
         setOnboarding: (value: boolean) => {
           set({ hasCompletedOnboarding: value });
         },
         completeOnboarding: () => {
-          console.log("set")
+          console.log("set");
           set({ hasCompletedOnboarding: true });
         },
 
@@ -44,9 +47,8 @@ export const useAuthStore = create<AuthStoreType>()(
       onRehydrateStorage: (state) => {
         state.setHasHydrated(true);
       },
-    }
-  )
+    },
+  ),
 );
-
 
 export const authStore = useAuthStore;
