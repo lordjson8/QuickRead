@@ -1,5 +1,6 @@
 import SkipOnboardingButton from "@/components/onboarding/SkipOnboardingButton";
 import { Link, Stack } from "expo-router";
+import { BlurView } from "expo-blur";
 
 import { View, Text, TouchableOpacity } from "react-native";
 
@@ -52,3 +53,4 @@ export default function WelcomeOnboarding() {
     </View>
   );
 }
+
